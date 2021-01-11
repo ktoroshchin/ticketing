@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: auth-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-mongo
+  template:
+    metadata:
+      labels:
+        app: auth-mongo
+    spec:
+      containers:
+        - name: auth-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mongo-db
+spec: 
+  selector: 
+  # get an access to the pod named auth-mongo
+    app: auth-mongo
+  type: ClusterIP
+  ports:
+    # name does not matter, could be anything
+    - name: db
+      protocol: TCP
+      port: 27017
+      # where to redirect request, 27017 is a default mondoDB port
+      targetPort: 27017

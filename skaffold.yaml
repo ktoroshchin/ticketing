@@ -2,6 +2,8 @@ apiVersion: skaffold/v2alpha3
 kind: Config
 deploy:
   kubectl: 
+  # telling skaffold to watch all files in ./infra/k8s/* basically no need to run kubectl 
+  # apply -f all the time you make change. Also it will delete all objects related to this directories if skaffold stops
     manifests:
       - ./infra/k8s/*
 build:
@@ -14,5 +16,7 @@ build:
         dockerfile: Dockerfile
       sync:
         manual:
+        # if change is made to below mentioned directories skaffold will replace old file with updated 
+        # if change will be made to the directories other that mentioned below , it will rebuild entire image
           - src: 'src/**/*.ts'
             dest: .
