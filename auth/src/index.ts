@@ -8,10 +8,19 @@ import { signupRoute } from './routes/signup'
 import { errorHandler } from './middleware/error-handler'
 import { NotFoundError } from './errors/not-found-error'
 import mongoose from 'mongoose'
+import cookieSession from 'cookie-session'
 
 const app = express()
-app.use(json())
+//Traffic is going through ingress-nginx, so trust it
+app.set('trust proxy', true)
 
+app.use(json())
+app.use(cookieSession({
+    //do not encrypt, cause JWT is encrypted
+    signed: false,
+    //must be on https connection
+    secure: true
+}))
 app.use(currentUserRouter)
 app.use(signinRouter)
 app.use(signoutRouter)
@@ -24,6 +33,10 @@ app.all('*', async(req, res) => {
 app.use(errorHandler)
 
 const start = async () => {
+    if(!process.env.jwt_key) {
+        throw new Error('jwt_key must be defined')
+    }
+    
     try { 
         await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
             useNewUrlParser: true,

@@ -1,7 +1,10 @@
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
-import { DatabaseConnectionError } from '../errors/database-connection-error'
+import { BadRequestError } from '../errors/bad-request-error'
 import { RequestValidationError } from '../errors/request-validation-error'
+import { User } from '../models/user'
+import jwt from 'jsonwebtoken'
+import { validateRequest } from '../middleware/validation-request'
 
 const router = express.Router()
 
@@ -12,20 +15,36 @@ router.post('/api/users/signup', [
     body('password')
         .trim()
         .isLength({ min:4, max: 20 })
-        .withMessage('Password must be between 4 and 20 characters')
+        .withMessage('Password must be between 4 and 20 characters'),
+    validateRequest
     ], 
-    async (req: Request, res: Response) => {
-        const errors = validationResult(req)
-
-        if(!errors.isEmpty()) {
-            throw new RequestValidationError(errors.array())
-        }
+    async (req: Request, res: Response, next: NextFunction) => {
+        //validateRequest function could also go here
         const { email, password } = req.body
-        
-        console.log('Creating a user...')
-        throw new DatabaseConnectionError()
+        //Check if email already exist
+        const existingUser = await User.findOne({ email })
 
-        res.send({})
+        if(existingUser){
+            throw new BadRequestError('Email in use')
+        }
+
+        const user = User.build({ email, password })
+        await user.save()
+
+        // Create json web token
+        const userJwt = jwt.sign({
+            id: user.id,
+            email: user.email
+        },
+            process.env.jwt_key!
+        )
+
+        // store it on session object
+        req.session = {
+            jwt: userJwt
+        }
+
+        res.status(201).send(user)
     }
 )
 
