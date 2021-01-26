@@ -9,6 +9,7 @@ deploy:
 build:
   googleCloudBuild:
     projectId: ticketing-300820
+  # artifact section is related to code syncing, it deployes code to the pod
   artifacts:
     - image: us.gcr.io/ticketing-300820/auth
       context: auth

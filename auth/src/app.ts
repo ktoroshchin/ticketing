@@ -18,7 +18,7 @@ app.use(cookieSession({
     //do not encrypt, cause JWT is encrypted
     signed: false,
     //must be on https connection
-    secure: true
+    secure: process.env.NODE_ENV !== 'test'
 }))
 app.use(currentUserRouter)
 app.use(signinRouter)

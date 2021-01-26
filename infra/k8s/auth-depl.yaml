@@ -1,18 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
+# name of deployment object
 metadata:
   name: auth-depl
+  # how deployment should behave
 spec: 
+  # number of pods to create
   replicas: 1
   selector:
+    # take a look at pods with current names "auth"
     matchLabels:
       app: auth
+  # configuration applied to pod
   template:
     metadata:
+    # pod should have label of "auth"
       labels:
         app: auth
     spec:
+    # pod should have a container with name of "auth"
       containers:
+        # name is only important for logging purposes
         - name: auth
           image: us.gcr.io/ticketing-300820/auth
           env:
