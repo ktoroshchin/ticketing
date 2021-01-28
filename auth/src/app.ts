@@ -12,7 +12,6 @@ import cookieSession from 'cookie-session'
 const app = express()
 //Traffic is going through ingress-nginx, so trust it
 app.set('trust proxy', true)
-
 app.use(json())
 app.use(cookieSession({
     //do not encrypt, cause JWT is encrypted

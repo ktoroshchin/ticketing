@@ -16,4 +16,16 @@ spec:
         - name: client
           image: us.gcr.io/ticketing-300820/client
 ---
-
+apiVersion: v1
+kind: Service
+metadata: 
+  name: client-srv
+spec:
+  selector:
+    app: client
+  type: ClusterIP
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
