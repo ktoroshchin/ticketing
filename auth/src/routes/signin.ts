@@ -1,8 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express'
 import { body } from 'express-validator'
-import { validateRequest } from '../middleware/validation-request'
+import { validateRequest, BadRequestError } from '@ktticketing/common'
 import { User } from '../models/user'
-import { BadRequestError } from '../errors/bad-request-error'
 import { Password } from '../services/password'
 import jwt from 'jsonwebtoken'
 
@@ -43,7 +42,6 @@ async (req: Request, res: Response, next: NextFunction) => {
     req.session = {
         jwt: userJwt
     }
-
 
     res.status(200).send(existingUser)
 })
