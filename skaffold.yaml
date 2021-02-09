@@ -7,10 +7,12 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
+  #builds docker images
   googleCloudBuild:
     projectId: ticketing-300820
   # artifact section is related to code syncing, it deployes code to the pod
   artifacts:
+    # name of image google build will assign (auth)
     - image: us.gcr.io/ticketing-300820/auth
       context: auth
       docker:

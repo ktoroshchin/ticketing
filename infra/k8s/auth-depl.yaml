@@ -17,10 +17,11 @@ spec:
     # pod should have label of "auth"
       labels:
         app: auth
+    # the exact attributes we want to apply to the object we are about to create
     spec:
     # pod should have a container with name of "auth"
       containers:
-        # name is only important for logging purposes
+        # name is only important for logging purposes/make a container with a name 'auth'
         - name: auth
           image: us.gcr.io/ticketing-300820/auth
           env:
@@ -40,7 +41,7 @@ spec:
     app: auth
   type: ClusterIP
   ports:
-  # name isnot important just for logging purposes
+  # name is not important just for logging purposes
     - name: auth
       protocol: TCP
       port: 3000
