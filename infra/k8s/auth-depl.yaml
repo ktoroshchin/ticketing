@@ -25,6 +25,8 @@ spec:
         - name: auth
           image: us.gcr.io/ticketing-300820/auth
           env:
+            - name: MONGO_URI
+              value: 'mongodb://auth-mongo-srv:27017/auth'
           # jwt secret to decode token
             - name: jwt_key
               valueFrom:

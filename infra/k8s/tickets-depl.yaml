@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+# name of deployment object
+metadata:
+  name: tickets-depl
+  # how deployment should behave
+spec: 
+  # number of pods to create
+  replicas: 1
+  selector:
+    # take a look at pods with current names "auth"
+    matchLabels:
+      app: tickets
+  # configuration applied to pod
+  template:
+    metadata:
+    # pod should have label of "auth"
+      labels:
+        app: tickets
+    # the exact attributes we want to apply to the object we are about to create
+    spec:
+    # pod should have a container with name of "auth"
+      containers:
+        # name is only important for logging purposes/make a container with a name 'auth'
+        - name: tickets
+          image: us.gcr.io/ticketing-300820/auth
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://tickets-mongo-srv:27017/tickets'
+          # jwt secret to decode token
+            - name: jwt_key
+              valueFrom:
+                secretKeyRef: 
+                  name: jwt-secret
+                  key: jwt_key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv 
+spec: 
+  selector:
+    app: tickets
+  type: ClusterIP
+  ports:
+  # name is not important just for logging purposes
+    - name: tickets
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

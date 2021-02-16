@@ -12,7 +12,7 @@ build:
     projectId: ticketing-300820
   # artifact section is related to code syncing, it deployes code to the pod
   artifacts:
-    # name of image google build will assign (auth)
+    # name of image that google build will assign (auth)
     - image: us.gcr.io/ticketing-300820/auth
       context: auth
       docker:
@@ -32,4 +32,15 @@ build:
         # if change is made to below mentioned directories skaffold will replace old file with updated 
         # if change will be made to the directories other that mentioned below , it will rebuild entire image
           - src: '**/*.js'
+            dest: .
+     # name of image that google build will assign (auth)
+    - image: us.gcr.io/ticketing-300820/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+        # if change is made to below mentioned directories skaffold will replace old file with updated 
+        # if change will be made to the directories other that mentioned below , it will rebuild entire image
+          - src: 'src/**/*.ts'
             dest: .

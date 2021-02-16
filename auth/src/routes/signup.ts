@@ -42,7 +42,7 @@ router.post('/api/users/signup', [
             jwt: userJwt
         }
 
-        res.status(201).send({ email: user.email, id: user.id })
+        res.status(201).send({ user })
     }
 )
 

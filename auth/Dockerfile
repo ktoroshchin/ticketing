@@ -8,4 +8,4 @@ RUN npm install
 # copy over all of our remaining source code
 COPY . .
 # set the command to run when the container starts up
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]

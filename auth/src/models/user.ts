@@ -35,11 +35,12 @@ const userSchema = new mongoose.Schema({
         }
     },
     {
-        //method that will remove _id, __v properties when object is returned
+        //method that will remove _id, __v, password properties when object is returned
          toJSON: {
             transform(doc, ret, options) {
                 ret.id = ret._id
                 delete ret._id
+                delete ret.password
                 delete ret.__v
             }
         }

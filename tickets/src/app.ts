@@ -1,8 +1,10 @@
 import express from 'express'
 import 'express-async-errors'
 import { json } from 'body-parser'
-import { errorHandler, NotFoundError } from '@ktticketing/common'
+import { currentUser, errorHandler, NotFoundError } from '@ktticketing/common'
 import cookieSession from 'cookie-session'
+import { createTicketRouter } from './routes/new'
+import { showTicketRouter } from './routes/show'
 
 const app = express()
 //Traffic is going through ingress-nginx, so trust it
@@ -14,11 +16,13 @@ app.use(cookieSession({
     //must be on https connection
     secure: process.env.NODE_ENV !== 'test'
 }))
+app.use(currentUser)
+app.use(createTicketRouter)
+app.use(showTicketRouter)
 
 app.all('*', async(req, res) => {
     throw new NotFoundError()
 })
 
 app.use(errorHandler)
-
 export { app }
