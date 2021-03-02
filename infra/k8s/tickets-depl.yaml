@@ -14,16 +14,16 @@ spec:
   # configuration applied to pod
   template:
     metadata:
-    # pod should have label of "auth"
+    # pod should have label of "tickets"
       labels:
         app: tickets
     # the exact attributes we want to apply to the object we are about to create
     spec:
-    # pod should have a container with name of "auth"
+    # pod should have a container with name of "tickets"
       containers:
         # name is only important for logging purposes/make a container with a name 'auth'
         - name: tickets
-          image: us.gcr.io/ticketing-300820/auth
+          image: us.gcr.io/ticketing-300820/tickets
           env:
             - name: MONGO_URI
               value: 'mongodb://tickets-mongo-srv:27017/tickets'
@@ -40,6 +40,7 @@ metadata:
   name: tickets-srv 
 spec: 
   selector:
+  # direct traffic to the pod with label nats
     app: tickets
   type: ClusterIP
   ports:

@@ -39,6 +39,7 @@ kind: Service
 metadata:
   name: auth-srv 
 spec: 
+  # direct traffic to the pod with label nats
   selector:
     app: auth
   type: ClusterIP
