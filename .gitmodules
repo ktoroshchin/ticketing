@@ -1,0 +1,3 @@
+[submodule "nats-test"]
+	path = nats-test
+	url = https://github.com/ktoroshchin/nats-test.git
